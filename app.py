@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import dash
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
@@ -19,7 +19,89 @@ navbar = dbc.NavbarSimple(
 )
 
 
-# Create tabs
+# About me - experiences
+## Modals/Callbacks
+### TVA
+tva_modal = html.Div(
+    [
+        dbc.Button(
+            "Tennessee Valley Authority",
+            id = "openTvaModal",
+            outline = True,
+            block = True
+        ),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("Tennessee Valley Authority"),
+                dbc.ModalBody(
+                    [
+                        html.Li("Partner with multiple departments to lead the programming of an R Shiny application used to inform future prices of TVA by simulating various billing structures and expected effects on customer segments"),
+                        html.Li("Integrate SQL data uploads and imports within R to optimize application performance and store results from simulations for other teams to access and analyze"),
+                        html.Li("Construct R Shiny Dashboard to convey retail pricing trends across the Tennessee Valley over last 5 years"),
+                        html.Li("Develop rapport with customer consultants while processing over 50% of fiscal year 2020 rate change requests"),
+                        html.Li("Spearhead creation of departmental process performance benchmarks and program a reproducible R markdown report to easily present performance trends and patterns"),
+                        html.Br(),
+                        html.A([html.Center([
+                            html.Img(src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/US-TennesseeValleyAuthority-Logo.svg/1200px-US-TennesseeValleyAuthority-Logo.svg.png",
+                                     width = 200,
+                                     height = 200)])],
+                            href = "https://www.tva.com"
+                        )
+                    ]
+                ),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id = "closeTvaModal", className="ml-auto")
+                )
+            ],
+            id = "tvaModal",
+            centered = True,
+            size = "lg"
+        )
+    ]
+)
+@app.callback(
+    Output("tvaModal", "is_open"),
+    [Input("openTvaModal", "n_clicks"), Input("closeTvaModal", "n_clicks")],
+    [State("tvaModal", "is_open")]
+)
+def toggle_tva_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+### Melton Scholars
+melton_modal = html.Div(
+    [
+        dbc.Button(
+            "Melton Scholar Program",
+            id = "openMeltonModal",
+            outline = True,
+            block = True
+        ),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("Melton Scholar Program"),
+                dbc.ModalBody(),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id = "closeMeltonModal", className="ml-auto")
+                )
+            ],
+            id = "meltonModal",
+            centered = True
+        )
+    ]
+)
+@app.callback(
+    Output("meltonModal", "is_open"),
+    [Input("openMeltonModal", "n_clicks"), Input("closeMeltonModal", "n_clicks")],
+    [State("meltonModal", "is_open")]
+)
+def toggle_tva_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+## Jumbotron
 experiences_jumbotron = dbc.Jumbotron(
     [
         dbc.Container(
@@ -32,21 +114,13 @@ experiences_jumbotron = dbc.Jumbotron(
                             [
                                 dbc.Col(
                                     [
-                                        dbc.Button(
-                                            "Tennessee Valley Authority", 
-                                            outline = True,
-                                            block = True
-                                        )
+                                        tva_modal
                                     ],
                                     width = 6),
 
                                 dbc.Col(
                                     [
-                                        dbc.Button(
-                                            "Melton Scholar Program", 
-                                            outline = True,
-                                            block = True
-                                        )
+                                        melton_modal
                                     ],
                                     width = 6
                                 )
@@ -58,9 +132,78 @@ experiences_jumbotron = dbc.Jumbotron(
             ],
             fluid = True
         )
-    ]
+    ],
+    fluid = True
 )
 
+
+# About me - skills
+## Modals/callbacks
+
+
+skills_jumbotron = dbc.Jumbotron(
+    [
+        dbc.Container(
+            [
+                html.Center([html.H2(["Skills"])]),
+                html.Hr(),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            [
+                                html.Center(
+                                    [
+                                        dbc.Button(
+                                            "Python",
+                                            outline = True,
+                                            block = True
+                                        )
+                                    ]
+                                )
+                            ],
+                            width = 4
+                        ),
+                        
+                        dbc.Col(
+                            [
+                                html.Center(
+                                    [
+                                        dbc.Button(
+                                            "R",
+                                            outline = True,
+                                            block = True
+                                        )
+                                    ]
+                                )
+                            ],
+                            width = 4
+                        ),
+                        
+                        dbc.Col(
+                            [
+                                html.Center(
+                                    [
+                                        dbc.Button(
+                                            "SQL", 
+                                            outline = True,
+                                            block = True
+                                        )
+                                    ]
+                                )
+                            ],
+                            width = 4
+                        )
+                    ]
+                )
+            ],
+            fluid = True
+        )
+    ],
+    fluid = True
+)
+
+
+# About me - education
 education_jumbotron = dbc.Jumbotron(
     [
         dbc.Container(
@@ -100,68 +243,12 @@ education_jumbotron = dbc.Jumbotron(
             ],
             fluid = True
         )
-    ]
+    ],
+    fluid = True
 )
 
-skills_jumbotron = dbc.Jumbotron(
-    [
-        dbc.Container(
-            [
-                html.Center([html.H2(["Skills"])]),
-                html.Hr(),
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            [
-                                html.Center(
-                                    [
-                                        dbc.Button(
-                                            html.H4(["Python"]),
-                                            outline = True,
-                                            block = True
-                                        )
-                                    ]
-                                )
-                            ],
-                            width = 4
-                        ),
-                        
-                        dbc.Col(
-                            [
-                                html.Center(
-                                    [
-                                        dbc.Button(
-                                            html.H4(["R"]),
-                                            outline = True,
-                                            block = True
-                                        )
-                                    ]
-                                )
-                            ],
-                            width = 4
-                        ),
-                        
-                        dbc.Col(
-                            [
-                                html.Center(
-                                    [
-                                        dbc.Button(
-                                            html.H4(["SQL"]), 
-                                            outline = True,
-                                            block = True
-                                        )
-                                    ]
-                                )
-                            ],
-                            width = 4
-                        )
-                    ]
-                )
-            ]
-        )
-    ]
-)
 
+# Tabs
 resume_tab = dbc.Tab(
     [
         dbc.Container(
@@ -173,14 +260,7 @@ resume_tab = dbc.Tab(
                             [
                                 experiences_jumbotron
                             ],
-                            width = 6
-                        ),
-                        
-                        dbc.Col(
-                            [
-                                education_jumbotron
-                            ],
-                            width = 6
+                            width = 12
                         )
                     ]
                 ),
@@ -194,12 +274,23 @@ resume_tab = dbc.Tab(
                             width = 12
                         )
                     ]
+                ),
+                
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            [
+                                education_jumbotron
+                            ],
+                            width = 12
+                        )
+                    ]
                 )
             ]
         )
     ],
     
-    label = "Resume"
+    label = "About Me"
 )
 
 tabs = dbc.Tabs(
@@ -209,6 +300,7 @@ tabs = dbc.Tabs(
 )
 
 
+# App layout
 app.layout = dbc.Container(
     [
         navbar,
